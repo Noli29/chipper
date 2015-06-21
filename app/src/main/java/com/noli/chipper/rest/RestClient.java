@@ -1,21 +1,26 @@
 package com.noli.chipper.rest;
 
+import android.util.Log;
+
+import com.noli.chipper.activity.BaseActivity;
 import com.noli.chipper.rest.service.MessageService;
 import com.noli.chipper.rest.service.PostService;
 import com.noli.chipper.rest.service.UserService;
+import com.noli.chipper.util.SPEditor;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
-/**
- * Created by noli on 13.06.15.
- */
 public class RestClient {
+
+    public static final String ROOT = "http://192.168.0.103:3000";
+    private static volatile RestClient instance;
     private MessageService messageService;
     private PostService postService;
     private UserService userService;
 
-    private static volatile RestClient instance;
+    private RestClient() {
+    }
 
     public static RestClient getInstance() {
         RestClient localInstance = instance;
@@ -30,13 +35,18 @@ public class RestClient {
         return localInstance;
     }
 
-    private RestClient() {
+    public void init(final BaseActivity baseActivity) {
+        final SPEditor spEditor = baseActivity.getSPEditor();
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://192.168.0.103:3000")
+                .setEndpoint(ROOT)
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
                     public void intercept(RequestFacade request) {
-                        request.addHeader("Authorization", "Token token=QOjkS-4BsYnTOvAHQO5w9A");
+                        String token = spEditor.readToken("");
+                        if (!token.equals("")) {
+                            Log.d("JHDGWYJ", token);
+                            request.addHeader("Authorization", "Token token=" + token);
+                        }
                         request.addHeader("Accept", "*/*;q=0.8");
                     }
                 })
@@ -49,7 +59,13 @@ public class RestClient {
     public MessageService getMessageService() {
         return messageService;
     }
-    public PostService getPostService() { return postService; }
-    public UserService getUserService() {return userService; }
+
+    public PostService getPostService() {
+        return postService;
+    }
+
+    public UserService getUserService() {
+        return userService;
+    }
 
 }

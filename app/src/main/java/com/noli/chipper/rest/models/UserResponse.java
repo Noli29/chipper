@@ -2,13 +2,13 @@ package com.noli.chipper.rest.models;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by noli on 16/06/15.
- */
 public class UserResponse {
 
     @SerializedName("id")
     public int id;
+
+    @SerializedName("auth_token")
+    public String token;
 
     @SerializedName("name")
     public String name;
@@ -19,38 +19,50 @@ public class UserResponse {
     @SerializedName("email")
     public String email;
 
+    @SerializedName("avatar_file_name")
+    public String userpicfn;
+
+    @SerializedName("avatar")
+    public String userpic;
+
     public UserResponse() {
+    }
+
+    public UserResponse(int id, String token, String name, String surname, String email, String userpicfn, String userpic) {
+        this.id = id;
+        this.token = token;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.userpicfn = userpicfn;
+        this.userpic = userpic;
+    }
+
+    public UserResponse(String userpicfn) {
+        this.userpicfn = userpicfn;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getToken() {
+        return token;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getSurname() {
         return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getUserpic() {
+        return userpic;
     }
 }

@@ -6,20 +6,29 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Headers;
+import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
-/**
- * Created by noli on 16/06/15.
- */
 public interface UserService {
 
-    @GET("/api/users/{number}")
-    void getUser(@Path("number") int number,
-                    Callback<UserResponse> callback);
+    @POST("/api/sessions")
+    void doLogin(@Query("email") String email, @Query("password") String pass, Callback<UserResponse> callback);
 
-    @GET("/api/users/")
-    void userList(Callback<List<UserResponse>> cb);
+    @GET("/api/users/{number}")
+    void getUser(@Path("number") int number, Callback<UserResponse> callback);
+
+    @GET("/api/users")
+    void getUsersList(Callback<List<UserResponse>> callback);
+
+    @PUT("/api/users/{number}")
+    void updateInfo(@Path("number") int userId,
+                    @Query("user[name]") String name,
+                    @Query("user[email]") String email,
+                    @Query("user[surname]") String surname,
+                    @Query("user[password]") String pass,
+                    @Query("user[password_confirmation]") String passConfirm,
+                    Callback<UserResponse> callback);
 
 }

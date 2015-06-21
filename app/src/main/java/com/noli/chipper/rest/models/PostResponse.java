@@ -2,9 +2,6 @@ package com.noli.chipper.rest.models;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by noli on 16/06/15.
- */
 public class PostResponse {
 
     @SerializedName("id")
@@ -43,5 +40,13 @@ public class PostResponse {
         this.userId = userId;
     }
 
+    @Override
+    public String toString() {
+        return "PostResponse{" +
+                "id=" + id +
+                ", post='" + post + '\'' +
+                ", userId=" + userId +
+                '}';
+    }
 
 }
