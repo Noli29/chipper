@@ -31,4 +31,12 @@ public interface UserService {
                     @Query("user[password_confirmation]") String passConfirm,
                     Callback<UserResponse> callback);
 
+    @POST("/api/users/")
+    void registerUser(@Query("user[name]") String name,
+                      @Query("user[email]") String email,
+                      @Query("user[surname]") String surname,
+                      @Query("user[password]") String pass,
+                      @Query("user[password_confirmation]") String passConfirm,
+                      Callback<UserResponse> callback);
+
 }

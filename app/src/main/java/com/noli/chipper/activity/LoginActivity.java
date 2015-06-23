@@ -9,7 +9,7 @@ import com.noli.chipper.R;
 import com.noli.chipper.rest.RestClient;
 import com.noli.chipper.rest.models.UserResponse;
 import com.noli.chipper.rest.service.UserService;
-import com.noli.chipper.util.SPEditor;
+import com.noli.chipper.util.UserUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,22 +43,14 @@ public class LoginActivity extends BaseActivity {
         userService.doLogin(email, pass, new Callback<UserResponse>() {
             @Override
             public void success(UserResponse userResponse, Response response) {
-                SPEditor spEditor = getSPEditor();
-                spEditor.writeToken(userResponse.token);
-                spEditor.writeUserId(userResponse.id);
-                String name = userResponse.surname != null ? userResponse.name + " " + userResponse.surname : userResponse.name;
-                spEditor.writeUsername(name);
-                String userpickUrl = null;
-                if (userResponse.userpicfn != null) {
-                    userpickUrl = userResponse.userpicfn;
+                if (response.getStatus() == 200) {
+                    UserUtil.writeUser(LoginActivity.this, userResponse);
+                    Toasts.showToast(getApplicationContext(), "Success");
+                    BaseIntents.startActivity(LoginActivity.this, MainActivity.class);
+                } else {
+                    Toasts.showToast(LoginActivity.this, "Incorrect data");
                 }
-                if (userResponse.userpic != null) {
-                    userpickUrl = userResponse.userpic;
-                }
-                spEditor.writeUserpickURL(RestClient.ROOT + "/avatars/small/" + userpickUrl);
-                spEditor.writeEmail(userResponse.email);
-                Toasts.showToast(getApplicationContext(), "Success");
-                BaseIntents.startActivity(LoginActivity.this, MainActivity.class);
+
             }
 
             @Override
@@ -66,6 +58,11 @@ public class LoginActivity extends BaseActivity {
                 Toasts.showToast(LoginActivity.this, "Error: " + error.getMessage());
             }
         });
+    }
+
+    @OnClick(R.id.register_btn)
+    public void startRegistration() {
+        BaseIntents.startActivity(this, RegisterActivity.class);
     }
 
     private void finishIfAuthed() {
